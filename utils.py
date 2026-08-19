@@ -379,30 +379,34 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     if "shortxlinks" in site.lower():
         try:
             import aiohttp
-            
-            async with sess.get(f"https://shortxlinks.com/api?api={api}&url={link}&format=text") as resp:
+            async with aiohttp.ClientSession() as sess:
+                async with sess.get(f"https://shortxlinks.com/api?api={api}&url={link}&format=text") as resp:
                     if resp.status == 200:
                         u = await resp.text()
-                        if u.startswith("http"): return u.strip()
-        except Exception as e: logger.error(e)
+                        if u.startswith("http"): 
+                            return u.strip()
+        except Exception as e: 
+            logger.error(e)
 
     sz = Shortzy(api, site)
-    try: return await sz.convert(link)
-    except: return await sz.get_quick_link(link)
+    try: 
+        return await sz.convert(link)
+    except: 
+        return await sz.get_quick_link(link)
 
-    async def get_settings(group_id):
-        
+async def get_settings(group_id):
     settings = temp.SETTINGS.get(group_id)
     if not settings:
         settings = await db.get_settings(group_id)
         temp.SETTINGS.update({group_id: settings})
     return settings
-    
+
 async def save_group_settings(group_id, key, value):
     current = await get_settings(group_id)
     current.update({key: value})
     temp.SETTINGS.update({group_id: current})
     await db.update_settings(group_id, current)
+
 
 def clean_filename(file_name):
     prefixes = ('[', '@', 'www.')
