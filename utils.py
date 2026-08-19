@@ -380,7 +380,7 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
         try:
             import aiohttp
             
-                async with sess.get(f"https://shortxlinks.com/api?api={api}&url={link}&format=text") as resp:
+            async with sess.get(f"https://shortxlinks.com/api?api={api}&url={link}&format=text") as resp:
                     if resp.status == 200:
                         u = await resp.text()
                         if u.startswith("http"): return u.strip()
