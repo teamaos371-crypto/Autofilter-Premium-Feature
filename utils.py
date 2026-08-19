@@ -373,6 +373,7 @@ async def search_gagala(text):
     return [title.getText() for title in titles]
 
 async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shortener=False):
+async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shortener=False):
     settings = await get_settings(grp_id)
     if is_third_shortener:             
         api, site = settings['api_three'], settings['shortner_three']
@@ -381,12 +382,27 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
             api, site = settings['api_two'], settings['shortner_two']
         else:
             api, site = settings['api'], settings['shortner']
+            
+    if "shortxlinks" in site.lower():
+        try:
+            import aiohttp
+            api_url = f"https://shortxlinks.com/api?api={api}&url={link}&format=text"
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url) as response:
+                    if response.status == 200:
+                        short_url = await response.text()
+                        if short_url.startswith("http"):
+                            return short_url.strip()
+        except Exception as e:
+            logger.error(f"Shortxlinks API Error: {e}")
+
     shortzy = Shortzy(api, site)
     try:
         link = await shortzy.convert(link)
     except Exception as e:
         link = await shortzy.get_quick_link(link)
     return link
+
 
 async def get_settings(group_id):
     settings = temp.SETTINGS.get(group_id)
