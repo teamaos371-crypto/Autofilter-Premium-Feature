@@ -297,10 +297,10 @@ async def start(client, message):
                     InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload)
                 ]]
                 reply_markup=InlineKeyboardMarkup(buttons)
-            if await db.user_verified(user_id):
-        msg = """✅ **Verification Successful!**Ab aapki file ready hai, movie wale button par dobara click karein. 🚀"""
+    if await db.user_verified(user_id):
+        msg = "✅ **Verification Successful!**Ab aapki file ready hai, movie wale button par dobara click karein. 🚀"""
     else:
-        msg = """❌ **You are not verified!** Please complete the verification first."""
+        msg = "❌ **You are not verified!** Please complete the verification first."""
 
 
 
