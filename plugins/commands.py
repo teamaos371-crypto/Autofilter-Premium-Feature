@@ -296,26 +296,22 @@ async def start(client, message):
     ],[
         InlineKeyboardButton(text="how to open link 🎬", url=howtodownload)
     ]]
-    reply_markup = InlineKeyboardMarkup(buttons)
-    
+    reply_markup = InlineKeyboardMarkup(buttons) 
     if await db.user_verified(user_id):
-        msg = "✅ **Verification Successful!**\n\nAb aapki file ready hai, movie wale button par dobara click karein. 🚀"
+        msg = "✅ **Verification Successful!!**Ab aapki file ready hai, movie wale button par dobara click karein."
     else:
-        msg = "❌ **You are not verified!** Please complete the verification first."
-        
+        msg = "❌ **You are not verified!**Please complete the verification first to get the file."
     n = await m.reply_text(
-        text=msg,
-        protect_content=True,
+        text=msg.format(message.from_user.mention),
+        protect_content = True,
         reply_markup=reply_markup,
         parse_mode=enums.ParseMode.HTML
-    )
-
-
-                await asyncio.sleep(300) 
-                await n.delete()
-                await m.delete()
-                return
-        except Exception as e:
+        )
+        await asyncio.sleep(300)
+        await n.delete()
+        await m.delete()
+        return 
+except Exception as e:
             print(f"Error In Verification - {e}")
             pass
 
