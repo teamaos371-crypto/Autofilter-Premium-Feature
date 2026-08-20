@@ -291,29 +291,30 @@ async def start(client, message):
                     howtodownload = settings.get('tutorial_3', TUTORIAL_3)
                 else:
                     howtodownload = settings.get('tutorial_2', TUTORIAL_2) if is_second_shortener else settings.get('tutorial', TUTORIAL)
-                buttons = [[
-                    InlineKeyboardButton(text="♻️ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪꜰʏ ♻️", url=verify)
-                ],[
-                    InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload)
-                 ]]
-                 reply_markup = InlineKeyboardMarkup(buttons)
-                 if await db.user_verified(user_id): 
-                     msg = script.THIRDT_VERIFICATION_TEXT
-                 else:            
-                     msg = script.SECOND_VERIFICATION_TEXT if is_second_shortener else script.VERIFICATION_TEXT
-                 n = await m.reply_text(
-                       text=msg.format(message.from_user.mention),
-                       protect_content=True,
-                       reply_markup=reply_markup,
-                       parse_mode=enums.ParseMode.HTML
-                 )
-                 await asyncio.sleep(300) 
-                 await n.delete()
-                 await m.delete()
-                 return
-         except Exception as e:
-         print(f"Error In Verification - {e}")
-         pass
+    buttons = [[
+        InlineKeyboardButton(text="♻️ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪꜰʏ ♻️", url=verify)
+    ],[
+        InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload)
+    ]]
+    reply_markup = InlineKeyboardMarkup(buttons)
+    if await db.user_verified(user_id): 
+        msg = script.THIRDT_VERIFICATION_TEXT
+    else:            
+        msg = script.SECOND_VERIFICATION_TEXT if is_second_shortener else script.VERIFICATION_TEXT
+    n = await m.reply_text(
+        text=msg.format(message.from_user.mention),
+        protect_content=True,
+        reply_markup=reply_markup,
+        parse_mode=enums.ParseMode.HTML
+    )
+    await asyncio.sleep(300) 
+    await n.delete()
+    await m.delete()
+    return
+except Exception as e:
+    print(f"Error In Verification - {e}")
+    pass
+
 
     # Now, await the file details task
     files_ = await file_details_task
