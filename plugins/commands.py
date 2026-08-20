@@ -299,17 +299,17 @@ async def start(client, message):
     reply_markup = InlineKeyboardMarkup(buttons)
     
     if await db.user_verified(user_id):
-        msg = "Verified Successfully!"
+        msg = "✅ **Verification Successful!**\n\nAb aapki file ready hai, movie wale button par dobara click karein. 🚀"
     else:
-        msg = "Not Verified!"
-
+        msg = "❌ **You are not verified!** Please complete the verification first."
         
     n = await m.reply_text(
-        text=msg.format(message.from_user.mention),
+        text=msg,
         protect_content=True,
         reply_markup=reply_markup,
         parse_mode=enums.ParseMode.HTML
     )
+
 
                 await asyncio.sleep(300) 
                 await n.delete()
