@@ -291,25 +291,26 @@ async def start(client, message):
                     howtodownload = settings.get('tutorial_3', TUTORIAL_3)
                 else:
                     howtodownload = settings.get('tutorial_2', TUTORIAL_2) if is_second_shortener else settings.get('tutorial', TUTORIAL)
-                buttons = [[
-                    InlineKeyboardButton(text="♻️ ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ᴠᴇʀɪꜰʏ ♻️", url=verify)
-                ],[
-                    InlineKeyboardButton(text="⁉️ ʜᴏᴡ ᴛᴏ ᴠᴇʀɪꜰʏ ⁉️", url=howtodownload)
-                ]]
-                reply_markup=InlineKeyboardMarkup(buttons)
+    buttons = [[
+        InlineKeyboardButton(text="⚡ Get File ⚡", url=verify["shortlink"])
+    ],[
+        InlineKeyboardButton(text="how to open link 🎬", url=howtodownload)
+    ]]
+    reply_markup = InlineKeyboardMarkup(buttons)
+    
     if await db.user_verified(user_id):
-        msg = "✅ **Verification Successful!**Ab aapki file ready hai, movie wale button par dobara click karein. 🚀"""
+        msg = "Verified Successfully!"
     else:
-        msg = "❌ **You are not verified!** Please complete the verification first."""
+        msg = "Not Verified!"
 
+        
+    n = await m.reply_text(
+        text=msg.format(message.from_user.mention),
+        protect_content=True,
+        reply_markup=reply_markup,
+        parse_mode=enums.ParseMode.HTML
+    )
 
-
-                n=await m.reply_text(
-                    text=msg.format(message.from_user.mention),
-                    protect_content = True,
-                    reply_markup=reply_markup,
-                    parse_mode=enums.ParseMode.HTML
-                )
                 await asyncio.sleep(300) 
                 await n.delete()
                 await m.delete()
